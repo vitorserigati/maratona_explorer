@@ -75,5 +75,3 @@ const cardNumberPattern = {
 
 const cardNumberMasked = IMask(cardNumber, cardNumberPattern);
 
-//start aula 3
-//testando
