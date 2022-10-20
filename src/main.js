@@ -7,19 +7,7 @@ const ccLogo = document.querySelector(".cc-logo span:nth-child(2) img");
 const cvc = document.querySelector("#security-code");
 const expirationDate = document.querySelector("#expiration-date");
 const cardNumber = document.querySelector("#card-number");
-
-function setCardType(type) {
-
-  const colors = {
-    "visa": ["#436D99", "#2D57F2"],
-    "mastercard": ["#DF6F29", "#C69347"],
-    "default": ["black", "gray"]
-  };
-
-  ccBgColor01.setAttribute("fill", colors[type][0]);
-  ccBgColor02.setAttribute("fill", colors[type][1]);
-  ccLogo.setAttribute("src", `cc-${type}.svg`)
-}
+const cardHolder = document.querySelector("#card-holder");
 
 setCardType("default")
 
@@ -74,3 +62,59 @@ const cardNumberPattern = {
 }
 
 const cardNumberMasked = IMask(cardNumber, cardNumberPattern);
+
+const addButton = document.querySelector("#add-card");
+addButton.addEventListener("click", () => {
+  console.log("clicou aqui, hein?");
+});
+
+document.querySelector("form").addEventListener("submit", (event) => {
+  event.preventDefault();
+});
+
+cardHolder.addEventListener("input", () => {
+  const ccHolder = document.querySelector(".cc-holder .value")
+  ccHolder.innerText = (cardHolder.value.length > 0 && cardHolder.value.match(/\S/g)) ? cardHolder.value : "Fulano da Silva";
+});
+
+securityCodeMasked.on("accept", () => {
+  updateSecurityCode(securityCodeMasked.value);
+});
+
+cardNumberMasked.on("accept", () => {
+  const cardType = cardNumberMasked.masked.currentMask.cardType;
+  setCardType(cardType);
+  updateCardNumber(cardNumberMasked.value);
+});
+
+expirationDateMasked.on("accept", () => {
+  updateExpirationDate(expirationDateMasked.value);
+});
+
+function updateExpirationDate(date) {
+  const ccDate = document.querySelector(".cc-expiration .value");
+  ccDate.innerText = date.length === 0 ? "02/32" : date;
+};
+
+function updateCardNumber(code) {
+  const ccNumber = document.querySelector(".cc-number");
+  ccNumber.innerText = code.length === 0 ? "1234 5678 9012 3456" : code;
+};
+
+function updateSecurityCode(code) {
+  const ccSecurity = document.querySelector(".cc-security .value");
+  ccSecurity.innerText = code.length === 0 ? "123" : code;
+};
+
+function setCardType(type) {
+
+  const colors = {
+    "visa": ["#436D99", "#2D57F2"],
+    "mastercard": ["#DF6F29", "#C69347"],
+    "default": ["black", "gray"]
+  };
+
+  ccBgColor01.setAttribute("fill", colors[type][0]);
+  ccBgColor02.setAttribute("fill", colors[type][1]);
+  ccLogo.setAttribute("src", `cc-${type}.svg`)
+}
